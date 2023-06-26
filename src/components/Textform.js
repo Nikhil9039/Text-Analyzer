@@ -34,6 +34,7 @@ export default function Textform(props) {
     let text = document.getElementById("myBox")
     text.select()
     navigator.clipboard.writeText(text.value);
+    document.getSelection().removeAllRanges(); //This is for unselect text
     props.showAlert("Text has been copied to clipboard", "success")
 
   }
@@ -58,7 +59,7 @@ export default function Textform(props) {
   return (
     <>
       <div className="container" style={{color: props.mode==='dark'?'white':'#042743'}}>
-        <h1>{props.title}</h1>
+        <h2>{props.title}</h2>
         <div className="mb-3">
           <textarea
             className="form-control"
@@ -67,25 +68,24 @@ export default function Textform(props) {
             rows="8"
             onChange={handleOnChange} style={{backgroundColor: props.mode==='dark'?'#03034c':'white', color: props.mode==='dark'?'white':'#042743'}}
           ></textarea>
-          <button className={`btn btn-${props.btnColor} my-2`} onClick={handleUpClick}>
-            Change to Upper case
-          </button>
-          <button className={`btn btn-${props.btnColor} my-2 mx-2`} onClick={handleLoClick}>
-            Change to Lower case
-          </button>
-          <button className={`btn btn-${props.btnColor} my-2`} onClick={handleClear} >Clear Text</button>
-          <button className={`btn btn-${props.btnColor} mx-2`} onClick={handleSpace} >Remove Extra Space</button>
-          <button className={`btn btn-${props.btnColor} my-2`} onClick={handleCopy} >Copy Text</button>
+          <button disabled={text.length===0} className={`btn btn-${props.btnColor} my-1 mx1`} onClick={handleUpClick}>Change to Upper case</button>
+          <button disabled={text.length===0} className={`btn btn-${props.btnColor} my-1 mx-1`} onClick={handleLoClick}>Change to Lower case</button>
+          <button disabled={text.length===0} className={`btn btn-${props.btnColor} my-1 mx-1`} onClick={handleClear} >Clear Text</button>
+          <button disabled={text.length===0} className={`btn btn-${props.btnColor} my-1 mx-1`} onClick={handleSpace} >Remove Extra Space</button>
+          <button disabled={text.length===0} className={`btn btn-${props.btnColor} my-1 mx-1`} onClick={handleCopy} >Copy Text</button>
         </div>
       </div>
       <div className="container my-3" style={{color: props.mode==='dark'?'white':'#042743'}} >
         <h1>Your Text Summary</h1>
-        <p>
+        {/* <p>
           {text.split(" ").length} words and {text.length} charecters
+        </p> */}
+         <p>
+          {text.split(" ").filter((element)=>{return element.length!==0}).length} words and {text.length} charecters
         </p>
-        <p>{0.008 * text.split(" ").length} Minutes to read</p>
+        <p>{0.008 * text.split(" ").filter((element)=>{return element.length!==0}).length} Minutes to read</p>
         <h3>Preview</h3>
-        <p>{text.length>0?text:"Enter something you want to see"}</p>
+        <p>{text.length>0?text:"Nothing to preview"}</p>
       </div>
     </>
   );
